@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>in2order</title>
+</head>
+
+<body>
+    <main>
+        <h1>Put numbers in order</h1>
+        Number is <a id="randomNum"></a><br>
+
+        <ol id="list"></ol>
+    </main>
+</body>
+<script>
+
+    let list = document.getElementById('list');
+
+    for (i = 1; i < 21; i++) {
+        let item = document.createElement("li");
+        item.setAttribute("id", i)
+        let button = document.createElement("button");
+        item.append(button);
+        button.setAttribute("onclick", "placeNumber(" + i + ")");
+        button.setAttribute("id", "button" + i);
+
+        list.append(item);
+    }
+
+
+    let generated = [];
+    let nums = {};
+
+    document.getElementById("randomNum").innerHTML = Math.floor(Math.random() * 1001);
+    generated.push(Number(document.getElementById("randomNum").innerHTML))
+
+    function getNextRandom() {
+        let n = Math.floor(Math.random() * 1001)
+        while (generated.includes(n)) {
+            n = Math.floor(Math.random() * 1001)
+        }
+        document.getElementById("randomNum").innerHTML = n;
+        generated.push(n);
+    }
+
+    function isSortedHelper() {
+        let sortedList = new Array()
+
+        Object.keys(nums).forEach(i => {
+            console.log(i);
+            console.log("adding " + nums[i])
+            sortedList.push(nums[i])
+        })
+
+        const isSorted = arr => arr.every((v, i, a) => !i || Number(a[i - 1]) <= v);
+        console.log(sortedList);
+        return isSorted(sortedList);
+    }
+
+
+    function placeNumber(index) {
+        let buttonID = "button" + index;
+        let randomNum = document.getElementById("randomNum").innerHTML;
+        document.getElementById(index).innerHTML = randomNum;
+        nums[index] = Number(randomNum);
+        getNextRandom();
+        if (!isSortedHelper()) {
+            alert("unlucky Loser");
+            location.reload();
+        } else if (generated.length == 20) {
+            alert(winner);
+        }
+    }
+</script>
+
+</html>
